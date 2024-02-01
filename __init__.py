@@ -14,3 +14,50 @@ def meteo():
         temp_day_value = list_element.get('temp', {}).get('day') - 273.15 # Conversion de Kelvin en °c 
         results.append({'Jour': dt_value, 'temp': temp_day_value})
     return jsonify(results=results)
+return jsonify(results=results)
+@app.route('/fr/')
+def helloworldfr():
+    return "<h2>Bonjour tout le monde !</h2>"
+
+Création d'une nouvelle route pour la lecture de la BDD
+@app.route('/lecture/')
+def ReadBDD():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM livres;')
+    data = cursor.fetchall()
+    conn.close()
+
+   # Construisez dynamiquement une chaîne de modèle HTML
+    templatestring = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Bibliotheque</title>
+    </head>
+    <body>
+        <h1>Contenu de la base de données</h1>
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>TITRE</th>
+                <th>AUTEUR</th>
+            </tr>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+    </html>
+    """
+    return rendertemplate_string(template_string, data=data)
+
+if __name == "__main":
+  app.run(debug=True)
